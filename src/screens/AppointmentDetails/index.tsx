@@ -69,7 +69,7 @@ export function AppointmentDetails(){
       <FlatList 
         data={members}
         keyExtractor={item => item.id}
-        ItemSeparatorComponent={() => <ListDivider/>}
+        ItemSeparatorComponent={() => <ListDivider isCentered/>}
         style={styles.members}
         renderItem={( { item } ) => (
           <Member data={item}/>
