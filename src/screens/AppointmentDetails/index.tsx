@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { BorderlessButton } from 'react-native-gesture-handler';
 import { useRoute } from '@react-navigation/native';
 import { Fontisto as Icon } from '@expo/vector-icons';
+import * as Linking from 'expo-linking'
 
 import { 
   ImageBackground, 
@@ -50,8 +51,6 @@ export function AppointmentDetails(){
     try {
       const response = await api.get(`/guilds/${guildSelected.guild.id}/widget.json`);
       setWidget(response.data);
-      console.log(widget);
-      
     } catch (error) { 
       Alert.alert('Verifique as configurações do servidor. Será que o Widget está habilitado?');
     } finally {
@@ -70,11 +69,13 @@ export function AppointmentDetails(){
     });
   }
 
+  function handleOpenGuild(){
+    Linking.openURL(widget.instant_invite);
+  }
+
   useEffect(()=> {
     fetchGuildWidget();
   },[]);
-
-  parou no 1:50:17
 
   return(
     <Background>
@@ -131,11 +132,16 @@ export function AppointmentDetails(){
           </>
         )
       }
-      <View style={styles.footer}>
-        <ButtonIcon 
-          title="Entrar na partida"
-        />
-      </View>  
+      
+      {
+        guildSelected.guild.owner && 
+        <View style={styles.footer}>
+          <ButtonIcon 
+            title="Entrar na partida"
+            onPress={handleOpenGuild}
+          />
+        </View>  
+      }
     </Background>
   );
 };

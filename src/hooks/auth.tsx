@@ -31,6 +31,7 @@ type AuthContextData = {
   user: User;
   loading: boolean;
   signIn: () => Promise<void>;
+  signOut: () => Promise<void>;
 }
 
 type AuthProviderProps = {
@@ -88,6 +89,15 @@ function AuthProvider({ children }: AuthProviderProps){
     }
   }
   
+  async function signOut(){
+    try {
+      setUser({} as User);
+      await AsyncStorage.removeItem(COLLECTION_USERS);
+    } catch (error) {
+      throw new Error('Não foi possível desconectar :(');
+    } 
+  }
+
   async function loadUserStorageData(){
     const storage = await AsyncStorage.getItem(COLLECTION_USERS);
 
@@ -106,7 +116,8 @@ function AuthProvider({ children }: AuthProviderProps){
     <AuthContext.Provider value={{
       user,
       loading,
-      signIn
+      signIn,
+      signOut
     }} >
       { children }
     </AuthContext.Provider>
